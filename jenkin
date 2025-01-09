@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Terraform Initialization') {
+            steps {
+                echo 'Starting Terraform Initialization'
+                sh """
+                  sudo -i bash -c 'cd /root && terraform init'
+                """
+            }
+            
+        }
+        
+        stage('Terraform Plan') {
+            steps {
+                echo 'Running Terraform Plan'
+                sh """
+                  sudo -i bash -c 'cd /root && terraform plan -out=tfplan.out'
+                """
+            }
+        }
+        
+        stage('Terraform Apply') {
+            steps {
+                echo 'Applying Terraform Plan'
+                sh """
+                  sudo -i bash -c 'cd /root && terraform apply -auto-approve tfplan.out'
+                """
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+pipeline {
+    agent any
+
+    stages {
+        stage('destroy') {
+            steps {
+                echo 'destroying Terraform resources'
+                sh """
+                  sudo -i bash -c 'cd /root && terraform destroy -auto-approve'
+                """
+            }
+        }
+    }
+}
