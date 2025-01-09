@@ -1,0 +1,14 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Terraform Initialization') {
+            steps {
+                echo 'Starting Terraform Initialization'
+                sh """
+                  sudo -i bash -c 'cd /root && terraform init'
+                """
+            }
+        }
+    }
+}
